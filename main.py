@@ -1,7 +1,5 @@
 import dotenv
 
-dotenv.load_dotenv()
-
 import asyncio
 
 import logging
@@ -11,6 +9,7 @@ from aiogram import types, F, Bot, Dispatcher
 from aiogram.filters import Command
 import zipfile
 
+dotenv.load_dotenv()
 from utils import downloader, upload_file_to_yandex_disk, walker, clear_directory, zip_folder
 
 bot = Bot(token=os.environ['TOKEN'])
