@@ -1,3 +1,4 @@
+import gc
 import logging
 import shutil
 import zipfile
@@ -54,6 +55,10 @@ def downloader(url):
 
     with open(f'static/{filename}', 'wb') as f:
         f.write(download_response.content)
+
+    download_response.close()
+    del download_response
+    gc.collect()
 
     return filename
 
