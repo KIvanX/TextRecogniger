@@ -58,8 +58,6 @@ def downloader(url):
 
     download_response.close()
     del download_response
-    gc.collect()
-
     return filename
 
 

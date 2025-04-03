@@ -27,7 +27,7 @@ async def start(message: types.Message):
 
 async def get_document(message: types.Message):
     mes = await message.answer("⬇️ Скачиваем файлы...")
-    filename = next((f for f in os.listdir('static') if f.endswith('.zip')), None) or downloader(message.text)
+    filename = downloader(message.text)
 
     if not filename.endswith(".zip"):
         return await message.answer("Мы принимаем только архивы с расширением zip")
