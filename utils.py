@@ -22,18 +22,22 @@ async def walker(src, dest, mes):
             src_file_path = src_dir + '/' + file_name
             dest_file_path = os.path.join(dest_dir, file_name)
             if file_name.endswith(".jpg") or file_name.endswith(".png"):
-                extracted_text = image_to_text(src_file_path)
+                try:
+                    extracted_text = await image_to_text(src_file_path)
+                except Exception as e:
+                    logging.error(e)
+                    extracted_text = 'Ошибка'
 
                 with open(dest_file_path[:-4] + '.txt', 'w') as f:
                     f.write(extracted_text)
+
                 i += 1
+                try:
+                    await mes.edit_text(f"🔍 Распознаем файлы... ({i})")
+                except:
+                    pass
             else:
                 open(dest_file_path, 'a').close()
-
-        try:
-            await mes.edit_text(f"🔍 Распознаем файлы... ({i})")
-        except:
-            pass
 
 
 def downloader(url):
