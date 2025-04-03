@@ -10,7 +10,7 @@ from aiogram.filters import Command
 import zipfile
 
 dotenv.load_dotenv()
-from utils import downloader, upload_file_to_yandex_disk, walker, clear_directory, zip_folder
+from utils import downloader, upload_file_to_yandex_disk, walker, clear_static, zip_folder
 
 bot = Bot(token=os.environ['TOKEN'])
 dp = Dispatcher()
@@ -27,7 +27,7 @@ async def start(message: types.Message):
 
 async def get_document(message: types.Message):
     mes = await message.answer("⬇️ Скачиваем файлы...")
-    filename: str = downloader(message.text)
+    filename = next((f for f in os.listdir('static') if f.endswith('.zip')), None) or downloader(message.text)
 
     if not filename.endswith(".zip"):
         return await message.answer("Мы принимаем только архивы с расширением zip")
@@ -47,7 +47,7 @@ async def get_document(message: types.Message):
     await mes.edit_text("⬆️ Загружаем файлы...")
     url = upload_file_to_yandex_disk(res_name + '.zip', f'disk:/recognizer/{filename}')
 
-    clear_directory('static')
+    clear_static(filename[:-4])
     await mes.edit_text('✅ Все готово!\n\n'
                         f'Вы можете загрузить архив <a href="{url}">по этой ссылке</a>', parse_mode='HTML')
 

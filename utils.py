@@ -93,13 +93,13 @@ def zip_folder(folder_path, output_path):
                 zipf.write(file_path, os.path.relpath(file_path, folder_path))
 
 
-def clear_directory(directory_path):
-    if not os.path.exists(directory_path):
-        logging.warning(f"Директория {directory_path} не существует.")
+def clear_static(prefix):
+    if not os.path.exists('static'):
+        logging.warning(f"Директория static не существует.")
         return
 
-    for filename in os.listdir(directory_path):
-        file_path = os.path.join(directory_path, filename)
+    for filename in [e for e in os.listdir('static') if prefix in e]:
+        file_path = os.path.join('static', filename)
 
         if os.path.isfile(file_path) or os.path.islink(file_path):
             os.unlink(file_path)
