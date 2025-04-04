@@ -56,9 +56,6 @@ def downloader(url):
     part = download_url.split('filename=')[1]
     filename = urllib.parse.unquote(part[:part.find('&')])
 
-    logging.warning(filename)
-    logging.warning(str(os.path.isfile('static/' + filename)))
-    input()
     if os.path.isfile('static/' + filename):
         return filename
 
