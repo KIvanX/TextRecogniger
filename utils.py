@@ -24,7 +24,7 @@ async def walker(src, dest, mes):
             dest_file_path = os.path.join(dest_dir, file_name)
             if file_name.endswith(".jpg") or file_name.endswith(".png"):
                 try:
-                    extracted_text = await image_to_text(src_file_path)
+                    extracted_text = await image_to_text(src_file_path) or ''
                 except Exception as e:
                     logging.error(e)
                     extracted_text = 'Ошибка'
