@@ -1,6 +1,7 @@
 import gc
 import logging
 import shutil
+import urllib
 import zipfile
 from urllib.parse import urlencode
 
@@ -10,7 +11,7 @@ from recognizer import image_to_text
 
 
 async def walker(src, dest, mes):
-    os.makedirs(dest)
+    os.makedirs(dest, exist_ok=True)
 
     i = 0
     for root, dirs, files in os.walk(src):
@@ -23,6 +24,10 @@ async def walker(src, dest, mes):
             src_file_path = src_dir + '/' + file_name
             dest_file_path = os.path.join(dest_dir, file_name)
             if file_name.endswith(".jpg") or file_name.endswith(".png"):
+                if os.path.isfile(dest_file_path[:-4] + '.txt'):
+                    i += 1
+                    continue
+
                 try:
                     extracted_text = await image_to_text(src_file_path) or ''
                 except Exception as e:
@@ -49,7 +54,10 @@ def downloader(url):
     download_url = response.json()['href']
 
     part = download_url.split('filename=')[1]
-    filename = part[:part.find('&')]
+    filename = urllib.parse.unquote(part[:part.find('&')])
+
+    if os.path.isfile('static/' + filename):
+        return filename
 
     download_response = requests.get(download_url)
 

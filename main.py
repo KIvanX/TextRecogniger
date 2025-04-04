@@ -33,21 +33,20 @@ async def get_document(message: types.Message):
         return await message.answer("Мы принимаем только архивы с расширением zip")
 
     await mes.edit_text("📦 Распаковываем файлы...")
-    with zipfile.ZipFile('static/' + filename, 'r') as zip_ref:
-        zip_ref.extractall('static/' + filename[:-4])
-    # filename = 'ЛНР (Ворошиловградская область.zip'
+    if not os.path.isdir('static/' + filename[:-4]):
+        with zipfile.ZipFile('static/' + filename, 'r') as zip_ref:
+            zip_ref.extractall('static/' + filename[:-4])
 
     await mes.edit_text("🔍 Распознаем файлы...")
-    res_name = 'static/' + filename[:-4] + '_done'
-    await walker('static/' + filename[:-4], res_name, mes)
+    await walker('static/' + filename[:-4], 'static/' + filename[:-4] + '_done', mes)
 
     await mes.edit_text("📦 Упаковываем файлы...")
-    zip_folder(res_name, res_name + '.zip')
+    zip_folder('static/' + filename[:-4] + '_done', 'static/' + filename[:-4] + '_done.zip')
 
     await mes.edit_text("⬆️ Загружаем файлы...")
-    url = upload_file_to_yandex_disk(res_name + '.zip', f'disk:/recognizer/{filename}')
+    url = upload_file_to_yandex_disk('static/' + filename[:-4] + '_done.zip', f'disk:/recognizer/{filename}')
 
-    clear_static(filename[:-4])
+    # clear_static(filename[:-4])
     await mes.edit_text('✅ Все готово!\n\n'
                         f'Вы можете загрузить архив <a href="{url}">по этой ссылке</a>', parse_mode='HTML')
 
