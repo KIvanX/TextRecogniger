@@ -32,10 +32,12 @@ async def get_document(message: types.Message):
     if not filename.endswith(".zip"):
         return await message.answer("Мы принимаем только архивы с расширением zip")
 
-    await mes.edit_text("📦 Распаковываем файлы...")
     if not os.path.isdir('static/' + filename[:-4]):
+        await mes.edit_text("📦 Распаковываем файлы...")
         with zipfile.ZipFile('static/' + filename, 'r') as zip_ref:
             zip_ref.extractall('static/' + filename[:-4])
+    else:
+        await asyncio.sleep(1)
 
     await mes.edit_text("🔍 Распознаем файлы...")
     await walker('static/' + filename[:-4], 'static/' + filename[:-4] + '_done', mes)
