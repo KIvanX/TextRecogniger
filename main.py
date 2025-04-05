@@ -67,7 +67,7 @@ async def main():
     dp.message.register(start, Command('start'))
     dp.message.register(get_document, F.text.startswith('https'))
 
-    print('Start...')
+    logging.warning('Start...')
     await dp.start_polling(bot)
 
 
