@@ -16,7 +16,6 @@ bot = Bot(token=os.environ['TOKEN'])
 dp = Dispatcher()
 
 logging.root.handlers.clear()
-
 logging.basicConfig(level=logging.WARNING, filename="logs.log", filemode="a",
                     format="%(asctime)s %(levelname)s %(message)s\n" + '_' * 100)
 

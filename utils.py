@@ -25,8 +25,10 @@ async def walker(src, dest, mes):
             dest_file_path = os.path.join(dest_dir, file_name)
             if file_name.endswith(".jpg") or file_name.endswith(".png"):
                 if os.path.isfile(dest_file_path[:-4] + '.txt'):
-                    i += 1
-                    continue
+                    with open(dest_file_path[:-4] + '.txt', 'r') as file:
+                        if file.read() != 'Ошибка':
+                            i += 1
+                            continue
 
                 try:
                     extracted_text = await image_to_text(src_file_path) or ''
